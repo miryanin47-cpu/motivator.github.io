@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Мотиватор для школьников: задания, баллы, накопления и прогресс.">
+  <title>Мотиватор | Прогресс каждый день</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#today" aria-label="Мотиватор, на сегодня">
+        <span class="brand-mark">✦</span>
+        <span>Мотиватор</span>
+      </a>
+      <div class="topbar-actions">
+        <span class="role-pill" id="rolePill">Родитель</span>
+        <button class="icon-button" id="switchRoleButton" type="button" title="Сменить роль" aria-label="Сменить роль">⇄</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <section class="welcome-row" id="today">
+        <div>
+          <p class="eyebrow" id="dateLabel">Сегодня</p>
+          <h1 id="greeting">День маленьких побед</h1>
+          <p class="subtle">Каждое выполненное дело приближает к большой цели.</p>
+        </div>
+        <div class="streak-badge" aria-label="Серия выполнений">
+          <span class="streak-icon">◎</span>
+          <span><strong id="streakValue">0 дней</strong><small>текущая серия</small></span>
+        </div>
+      </section>
+
+      <section class="hero-grid">
+        <article class="balance-card card">
+          <div class="card-kicker">Накопления за месяц</div>
+          <div class="balance-value"><span id="monthRubles">0</span><span class="currency">₽</span></div>
+          <p class="balance-note">Это равно <strong id="monthPoints">0 баллам</strong></p>
+          <div class="progress-track large"><span id="limitProgress" class="progress-fill"></span></div>
+          <div class="progress-meta"><span id="limitProgressText">0% лимита</span><span id="limitCaption">Лимит: 0 ₽</span></div>
+        </article>
+        <article class="today-card card">
+          <div class="card-heading"><div><div class="card-kicker">Сегодня</div><h2>Результат дня</h2></div><span class="mini-spark">↗</span></div>
+          <div class="today-stats"><div><strong id="todayPoints">0</strong><span>баллов</span></div><div><strong id="todayRubles">0 ₽</strong><span>заработано</span></div></div>
+          <p class="today-message" id="todayMessage">Выбери первое выполненное задание.</p>
+        </article>
+      </section>
+
+      <nav class="tabs" aria-label="Разделы приложения">
+        <button class="tab active" type="button" data-view="todayView">Сегодня</button>
+        <button class="tab" type="button" data-view="analyticsView">Аналитика</button>
+        <button class="tab parent-only" type="button" data-view="settingsView">Настройки</button>
+      </nav>
+
+      <section id="todayView" class="view active-view">
+        <div class="section-heading"><div><p class="eyebrow">План на сегодня</p><h2>Задания</h2></div><span class="completion-count" id="completionCount">0 из 0</span></div>
+        <div class="task-list" id="taskList"></div>
+        <div class="empty-state hidden" id="emptyTasks">Заданий пока нет. Родитель может добавить их в настройках.</div>
+      </section>
+
+      <section id="analyticsView" class="view">
+        <div class="section-heading"><div><p class="eyebrow">Картина прогресса</p><h2>Аналитика</h2></div><div class="period-switch"><button class="period-button active" data-period="week" type="button">За неделю</button><button class="period-button" data-period="month" type="button">За месяц</button></div></div>
+        <div class="analytics-grid">
+          <article class="chart-card card"><div class="card-heading"><div><h3>Выполнение заданий</h3><p class="subtle">Соотношение результата</p></div></div><div class="donut-wrap"><canvas id="completionChart"></canvas><div class="donut-label"><strong id="completionPercent">0%</strong><span>выполнено</span></div></div></article>
+          <article class="chart-card card"><div class="card-heading"><div><h3>Динамика баллов</h3><p class="subtle" id="chartPeriodLabel">Последние 7 дней</p></div><span class="chart-total" id="chartTotal">0 баллов</span></div><div class="line-chart-wrap"><canvas id="pointsChart"></canvas></div></article>
+        </div>
+        <div class="calendar-card card"><div class="card-heading"><div><p class="eyebrow">Ритм месяца</p><h3 id="calendarTitle">Календарь прогресса</h3></div><div class="legend"><span>Меньше</span><i class="heat-0"></i><i class="heat-1"></i><i class="heat-2"></i><i class="heat-3"></i><span>Больше</span></div></div><div class="calendar-grid weekdays"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span></div><div class="calendar-grid" id="calendarGrid"></div></div>
+      </section>
+
+      <section id="settingsView" class="view parent-only">
+        <div class="section-heading"><div><p class="eyebrow">Контроль и правила</p><h2>Настройки</h2></div></div>
+        <div class="settings-grid">
+          <article class="settings-card card"><div class="card-heading"><div><h3>Правила накоплений</h3><p class="subtle">Настройте курс и месячный предел.</p></div><span class="settings-icon">₽</span></div><label class="field-label" for="rateInput">1 балл = рублей</label><input class="text-input" id="rateInput" type="number" min="0" step="1"><label class="field-label" for="limitInput">Лимит на месяц, ₽</label><input class="text-input" id="limitInput" type="number" min="0" step="10"><button class="primary-button" id="saveRulesButton" type="button">Сохранить правила</button><p class="form-feedback" id="rulesFeedback" role="status"></p></article>
+          <article class="settings-card card"><div class="card-heading"><div><h3>Список заданий</h3><p class="subtle">Добавляйте привычки и важные шаги.</p></div><span class="settings-icon">✓</span></div><div class="manage-tasks" id="manageTasks"></div><form class="add-task-form" id="addTaskForm"><input class="text-input" id="newTaskInput" type="text" maxlength="80" placeholder="Новое задание" required><button class="secondary-button" type="submit">Добавить</button></form></article>
+          <article class="settings-card card security-card"><div class="card-heading"><div><h3>Доступ родителя</h3><p class="subtle">PIN защищает настройки от случайных изменений.</p></div><span class="settings-icon">⌁</span></div><label class="field-label" for="pinInput">Новый PIN-код</label><input class="text-input" id="pinInput" inputmode="numeric" maxlength="8" placeholder="4–8 цифр"><button class="secondary-button" id="savePinButton" type="button">Обновить PIN</button><p class="form-feedback" id="pinFeedback" role="status"></p></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal hidden" id="roleModal" role="dialog" aria-modal="true" aria-labelledby="roleModalTitle"><div class="modal-panel"><div class="modal-icon">✦</div><h2 id="roleModalTitle">Кто сегодня открывает Мотиватор?</h2><p class="subtle">Родитель управляет правилами, школьник смотрит свой прогресс.</p><div class="role-options"><button class="role-option" type="button" data-role="student"><span>☼</span><strong>Я школьник</strong><small>Смотреть задания и накопления</small></button><button class="role-option" type="button" data-role="parent"><span>⌂</span><strong>Я родитель</strong><small>Управлять заданиями и правилами</small></button></div><form class="pin-form hidden" id="pinForm"><label class="field-label" for="modalPinInput">Введите PIN родителя</label><input class="text-input" id="modalPinInput" inputmode="numeric" maxlength="8" autocomplete="off"><p class="form-feedback error" id="pinError"></p><button class="primary-button" type="submit">Войти</button></form></div></div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
