@@ -2,7 +2,7 @@
   "name": "Мотиватор | Прогресс каждый день",
   "short_name": "Мотиватор",
   "description": "Мотиватор для школьников: задания, баллы, накопления и прогресс.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4F46E5",
